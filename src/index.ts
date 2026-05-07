@@ -63,8 +63,14 @@ export type {
   UrgencyLabel,
 } from "./types"
 
-export type { SalesRegion } from "./_types/region"
-export { isValidRegion } from "./_types/region"
+export type { SalesRegion, ReportLocale } from "./_types/region"
+export {
+  isValidRegion,
+  // B33 Phase 2 (2026-05-07): region → locale canonical mapper + URL builder
+  regionToLocale,
+  buildReportUrl,
+  REPORT_LOCALES,
+} from "./_types/region"
 
 // ─── Block component direct exports (任意 import 用) ───────────────
 // consumer 側で「BlockRenderer 経由ではなく特定 Block を直接使いたい」ケース
