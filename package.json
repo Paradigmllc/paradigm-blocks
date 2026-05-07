@@ -1,6 +1,6 @@
 {
   "name": "@paradigmllc/blocks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用) shared between Appexxme + paradigmjpcom",
   "license": "UNLICENSED",
   "private": false,
