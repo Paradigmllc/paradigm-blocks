@@ -19,6 +19,8 @@ import {
   themeToCssVars,
   resolveDesignTheme,
 } from "./themes"
+// B33 Phase 3 (2026-05-08): useDesignTheme() 有効化のため context provider を統合
+import { ThemeContextProvider } from "./ThemeContext"
 
 interface ThemeProviderProps {
   /** 明示指定 (DB の meta.design_theme) */
@@ -61,7 +63,12 @@ export function ThemeProvider({
       style={style}
       className={className}
     >
-      {children}
+      {/* B33 Phase 3 (2026-05-08): ThemeContextProvider で wrap → Block 内で
+          useDesignTheme() が resolved theme を返すように. CSS 変数 injection と
+          context 伝播を 1 wrapper にまとめる. */}
+      <ThemeContextProvider theme={resolved}>
+        {children}
+      </ThemeContextProvider>
     </Tag>
   )
 }

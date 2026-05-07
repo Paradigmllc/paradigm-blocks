@@ -13,6 +13,8 @@ export { default as BlocksReportRenderer } from "./BlocksReportRenderer"
 
 // ─── B33 (2026-05-07) — Design Theme System (6 themes) ────────────
 export { ThemeProvider, default as DefaultThemeProvider } from "./ThemeProvider"
+// B33 Phase 3 (2026-05-08) — useDesignTheme() hook for Block-level theme branching
+export { ThemeContextProvider, useDesignTheme } from "./ThemeContext"
 export {
   DESIGN_THEMES,
   DESIGN_THEME_TOKENS,
