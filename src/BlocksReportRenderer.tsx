@@ -22,6 +22,9 @@ import type { SalesRegion } from "./_types/region"
 import { isValidRegion } from "./_types/region"
 // Batch 12-C: Magic UI gorgeous reveal (hopeful only)
 import { Confetti } from "./_magicui/confetti"
+// B33 (2026-05-07): 6-design theme injection
+import { ThemeProvider } from "./ThemeProvider"
+import { isValidDesignTheme, type DesignTheme } from "./themes"
 
 interface Props {
   doc: ContentDoc
@@ -35,6 +38,13 @@ export default function BlocksReportRenderer({ doc, slugOrToken }: Props) {
   // Batch 12-C: hopeful 等の positive urgency でレポート閲覧時に祝祭 confetti
   const urgencyLabel = (doc.meta?.personalize_urgency_label as string | undefined) ?? null
   const [showConfetti, setShowConfetti] = useState(false)
+
+  // B33 (2026-05-07): design_theme 解決 (meta.design_theme > industry > pitch_angle > "stripe")
+  const explicitTheme: DesignTheme | undefined = isValidDesignTheme(doc.meta?.design_theme)
+    ? (doc.meta.design_theme as DesignTheme)
+    : undefined
+  const themeIndustry = (doc.meta?.industry as string | undefined) ?? null
+  const themePitchAngle = (doc.meta?.pitch_angle as string | undefined) ?? null
   useEffect(() => {
     if (urgencyLabel === "hopeful") {
       const t = setTimeout(() => setShowConfetti(true), 800)
@@ -85,27 +95,46 @@ export default function BlocksReportRenderer({ doc, slugOrToken }: Props) {
   }, [slugOrToken])
 
   return (
-    <div
-      className="min-h-screen bg-white"
+    <ThemeProvider
+      theme={explicitTheme}
+      industry={themeIndustry}
+      pitchAngle={themePitchAngle}
       dir={region === "ar" ? "rtl" : "ltr"}
-      data-cms-slug={doc.slug}
-      data-page-type={doc.page_type}
+      className="min-h-screen"
     >
-      {showConfetti && (
-        <Confetti className="fixed inset-0 z-50 pointer-events-none" />
-      )}
-      <BlockRenderer blocks={doc.blocks} region={region} />
-
-      <footer className="border-t border-gray-100 mt-8 py-6 text-center">
-        <p className="text-[10px] text-gray-400">
-          © {new Date().getFullYear()} Paradigm合同会社
-        </p>
-        {doc.title && (
-          <p className="text-[10px] text-gray-400 mt-1">
-            Confidential — {doc.title}
-          </p>
+      <div
+        data-cms-slug={doc.slug}
+        data-page-type={doc.page_type}
+        style={{
+          minHeight: "100vh",
+          background: "rgb(var(--paradigm-paper))",
+          color: "rgb(var(--paradigm-ink))",
+        }}
+      >
+        {showConfetti && (
+          <Confetti className="fixed inset-0 z-50 pointer-events-none" />
         )}
-      </footer>
-    </div>
+        <BlockRenderer blocks={doc.blocks} region={region} />
+
+        <footer
+          style={{
+            borderTop: "1px solid rgb(var(--paradigm-line))",
+            marginTop: "32px",
+            padding: "24px 16px",
+            textAlign: "center",
+            background: "rgb(var(--paradigm-paper-deep))",
+          }}
+        >
+          <p style={{ fontSize: 10, color: "rgb(var(--paradigm-ink-mute))" }}>
+            © {new Date().getFullYear()} Paradigm合同会社
+          </p>
+          {doc.title && (
+            <p style={{ fontSize: 10, color: "rgb(var(--paradigm-ink-mute))", marginTop: 4 }}>
+              Confidential — {doc.title}
+            </p>
+          )}
+        </footer>
+      </div>
+    </ThemeProvider>
   )
 }

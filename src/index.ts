@@ -11,6 +11,20 @@
 export { BlockRenderer } from "./BlockRenderer"
 export { default as BlocksReportRenderer } from "./BlocksReportRenderer"
 
+// ─── B33 (2026-05-07) — Design Theme System (6 themes) ────────────
+export { ThemeProvider, default as DefaultThemeProvider } from "./ThemeProvider"
+export {
+  DESIGN_THEMES,
+  DESIGN_THEME_TOKENS,
+  INDUSTRY_THEME_HINT,
+  PITCH_ANGLE_THEME_DEFAULT,
+  themeToCssVars,
+  isValidDesignTheme,
+  resolveDesignTheme,
+  getThemeTokens,
+} from "./themes"
+export type { DesignTheme, DesignThemeTokens } from "./themes"
+
 // ─── Type re-exports ─────────────────────────────────────────────
 export type {
   // discriminated union

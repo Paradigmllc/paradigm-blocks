@@ -398,6 +398,15 @@ export interface ContentDoc {
   region: SalesRegion | null
   title: string | null
   blocks: Block[]
+  /**
+   * meta 内で B33 (2026-05-07) から認識される予約キー:
+   *   - design_theme: DesignTheme (6 値)
+   *   - industry: string (theme 自動 resolve hint)
+   *   - pitch_angle: string (loss/opportunity/trust/urgency/competitive/compliance)
+   *   - personalize_urgency_label: UrgencyLabel
+   *   - template_id: string (DB report_templates.id)
+   *   - template_variant: string (A/B variant key)
+   */
   meta: Record<string, unknown>
   is_published: boolean
   is_active: boolean
