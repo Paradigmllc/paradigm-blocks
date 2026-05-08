@@ -1,7 +1,7 @@
 {
   "name": "@paradigmllc/blocks",
-  "version": "0.5.1",
-  "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用) shared between Appexxme + paradigmjpcom. v0.5.1 (audit-fix) adds props-driven labels to 5 research-grade blocks for STRICT_LANGUAGE_GUARD + A-CONTENT compliance (12 region × CMS 編集可能化).",
+  "version": "0.6.0",
+  "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用) shared between Appexxme + paradigmjpcom. v0.6.0 (D-11 R7 Phase 2C) deprecates UrgencyLabel type and makes HeroWithUrgencyProps.urgencyLabel optional — composer v2 (research-grade 12 block) migration prep. v0.7.0 will physically remove the type.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",

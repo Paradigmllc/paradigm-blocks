@@ -42,10 +42,13 @@ function extractNumber(value: string): { num: number; prefix: string; suffix: st
 export function HeroWithUrgencyBlock({
   title, subtitle, urgencyLabel, kpi, countdownUntil, ctaLabel, ctaUrl, continuityBadge,
 }: HeroWithUrgencyProps) {
-  const style = URGENCY_STYLES[urgencyLabel]
+  // D-11 R7 Phase 2C (2026-05-08 v0.6.0): urgencyLabel optional 化に伴う fallback.
+  // 未指定 caller (composer v2 移行途中) は "notice" (中立) で render.
+  const effectiveUrgency: UrgencyLabel = urgencyLabel ?? "notice"
+  const style = URGENCY_STYLES[effectiveUrgency]
   const countdown = formatCountdown(countdownUntil)
   const kpiNumber = kpi ? extractNumber(kpi.value) : null
-  const isCritical = urgencyLabel === "despair" || urgencyLabel === "alert"
+  const isCritical = effectiveUrgency === "despair" || effectiveUrgency === "alert"
 
   return (
     <section className={`relative overflow-hidden py-20 px-6 border-t-4 ${style.bg}`}>
@@ -53,7 +56,7 @@ export function HeroWithUrgencyBlock({
       {isCritical && <Meteors number={20} />}
 
       {/* Magic UI: Sparkles (希望を視覚化・hopeful のみ) */}
-      {urgencyLabel === "hopeful" && (
+      {effectiveUrgency === "hopeful" && (
         <div className="absolute inset-0 pointer-events-none">
           <Sparkles className="absolute inset-0" />
         </div>

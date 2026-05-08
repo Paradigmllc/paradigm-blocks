@@ -95,17 +95,27 @@ export interface HtmlEmbedProps {
 // 既存の hero/cta は汎用 (一般 LP・diagram report どちらでも使える) のに対し、
 // この 5 種は「診断レポート専用」で urgency / 業種比較 / 案件事例を構造化して持つ。
 
-/** 緊急度 5 段階 — 絶望→希望 を表現する label. report-templates seed と同じ語彙. */
+/**
+ * 緊急度 5 段階 — 絶望→希望 を表現する label. report-templates seed と同じ語彙.
+ *
+ * @deprecated D-11 R7 (2026-05-08) で urgency 概念を物理撤去予定 (composer v2 では不使用).
+ *             v0.6.0 以降は HeroWithUrgencyProps.urgencyLabel が optional 化されたため、
+ *             新規 caller は urgency を渡さない構造に移行すること. v0.7.0 で型物理削除予定.
+ */
 export type UrgencyLabel = "despair" | "alert" | "warning" | "notice" | "hopeful"
 
 /**
  * HeroWithUrgencyProps — urgency_label + countdown + KPI 1 つを併載した Hero.
- * 主治医ポジション (継続診断) でも使えるよう urgency_label が必須.
+ *
+ * @deprecated D-11 R7 (2026-05-08): 顧客文言で「絶望」「希望」等の感情語は不適切.
+ *             composer v2 (cover_summary block) に移行済. v0.7.0 で本 block 物理削除予定.
+ *             v0.6.0 では urgencyLabel が optional 化され、未指定時は "notice" 扱い.
  */
 export interface HeroWithUrgencyProps {
   title: string
   subtitle?: string
-  urgencyLabel: UrgencyLabel
+  /** @deprecated v0.6.0 で optional 化. 新 caller は省略推奨. */
+  urgencyLabel?: UrgencyLabel
   /** KPI 1 つを大きく表示. 例: { value: "¥38M", label: "年間機会損失", trend: "-12% YoY" } */
   kpi?: { value: string; label: string; trend?: string }
   /** "次回ヘルスチェック まで" 等のカウントダウン (ISO datetime). */
