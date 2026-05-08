@@ -51,7 +51,7 @@ export type {
   CaseStudyProps,
   CTAPremiumProps,
   FooterSignatureProps,
-  // P39 Phase 3 — Diagnostic / Sales Material 8
+  // P39 Phase 3 — Diagnostic / Sales Material 8 (@deprecated D-10)
   ScoreRingProps,
   AnnualLossCardProps,
   TopPainsListProps,
@@ -60,8 +60,18 @@ export type {
   CustomQuoteProps,
   RoadmapProps,
   RoiCalculatorProps,
+  // D-10 (2026-05-08) Narrative Block 8 種 (SCQA + Challenger Sale)
+  TailoredOpeningProps,
+  SpecificInsightProps,
+  ThreeCriticalIssuesProps,
+  TheQuestionProps,
+  OurAnswerProps,
+  ProofWithCredentialsProps,
+  FirstStepProps,
+  FooterContinuityProps,
   // shared
   SourceCitation,
+  SourcedFact,
   UrgencyLabel,
 } from "./types"
 
@@ -99,3 +109,12 @@ export { ExecutiveSummaryBlock } from "./blocks/ExecutiveSummary"
 export { CustomQuoteBlock } from "./blocks/CustomQuote"
 export { RoadmapBlock } from "./blocks/Roadmap"
 export { RoiCalculatorBlock } from "./blocks/RoiCalculator"
+// D-10 (2026-05-08) Narrative Blocks
+export { TailoredOpeningBlock } from "./blocks/TailoredOpening"
+export { SpecificInsightBlock } from "./blocks/SpecificInsight"
+export { ThreeCriticalIssuesBlock } from "./blocks/ThreeCriticalIssues"
+export { TheQuestionBlock } from "./blocks/TheQuestion"
+export { OurAnswerBlock } from "./blocks/OurAnswer"
+export { ProofWithCredentialsBlock } from "./blocks/ProofWithCredentials"
+export { FirstStepBlock } from "./blocks/FirstStep"
+export { FooterContinuityBlock } from "./blocks/FooterContinuity"

@@ -1,7 +1,7 @@
 {
   "name": "@paradigmllc/blocks",
-  "version": "0.3.0",
-  "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用) shared between Appexxme + paradigmjpcom",
+  "version": "0.4.0",
+  "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用) shared between Appexxme + paradigmjpcom. v0.4.0 adds 8 narrative blocks (SCQA + Challenger Sale) and deprecates audit-style score blocks.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",

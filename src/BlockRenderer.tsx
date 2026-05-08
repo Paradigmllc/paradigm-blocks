@@ -22,7 +22,7 @@ import { IndustryChartBlock } from "./blocks/IndustryChart"
 import { CaseStudyBlock } from "./blocks/CaseStudy"
 import { CTAPremiumBlock } from "./blocks/CTAPremium"
 import { FooterSignatureBlock } from "./blocks/FooterSignature"
-// P39 Phase 3 (2026-05-03) — Diagnostic / Sales Material 8 新 Block
+// P39 Phase 3 (2026-05-03) — Diagnostic / Sales Material 8 新 Block (@deprecated D-10)
 import { ScoreRingBlock } from "./blocks/ScoreRing"
 import { AnnualLossCardBlock } from "./blocks/AnnualLossCard"
 import { TopPainsListBlock } from "./blocks/TopPainsList"
@@ -31,6 +31,15 @@ import { ExecutiveSummaryBlock } from "./blocks/ExecutiveSummary"
 import { CustomQuoteBlock } from "./blocks/CustomQuote"
 import { RoadmapBlock } from "./blocks/Roadmap"
 import { RoiCalculatorBlock } from "./blocks/RoiCalculator"
+// D-10 (2026-05-08) — Narrative Block 8 種 (SCQA + Challenger Sale)
+import { TailoredOpeningBlock } from "./blocks/TailoredOpening"
+import { SpecificInsightBlock } from "./blocks/SpecificInsight"
+import { ThreeCriticalIssuesBlock } from "./blocks/ThreeCriticalIssues"
+import { TheQuestionBlock } from "./blocks/TheQuestion"
+import { OurAnswerBlock } from "./blocks/OurAnswer"
+import { ProofWithCredentialsBlock } from "./blocks/ProofWithCredentials"
+import { FirstStepBlock } from "./blocks/FirstStep"
+import { FooterContinuityBlock } from "./blocks/FooterContinuity"
 
 interface BlockRendererProps {
   blocks: Block[]
@@ -101,6 +110,15 @@ export function BlockRenderer({ blocks, region }: BlockRendererProps) {
           case "custom_quote":      return <CustomQuoteBlock key={block.id} {...(props as BlockProps["custom_quote"])} />
           case "roadmap":           return <RoadmapBlock key={block.id} {...(props as BlockProps["roadmap"])} />
           case "roi_calculator":    return <RoiCalculatorBlock key={block.id} {...(props as BlockProps["roi_calculator"])} />
+          // D-10 (2026-05-08) Narrative Blocks
+          case "tailored_opening":         return <TailoredOpeningBlock key={block.id} {...(props as BlockProps["tailored_opening"])} />
+          case "specific_insight":         return <SpecificInsightBlock key={block.id} {...(props as BlockProps["specific_insight"])} />
+          case "three_critical_issues":    return <ThreeCriticalIssuesBlock key={block.id} {...(props as BlockProps["three_critical_issues"])} />
+          case "the_question":             return <TheQuestionBlock key={block.id} {...(props as BlockProps["the_question"])} />
+          case "our_answer":               return <OurAnswerBlock key={block.id} {...(props as BlockProps["our_answer"])} />
+          case "proof_with_credentials":   return <ProofWithCredentialsBlock key={block.id} {...(props as BlockProps["proof_with_credentials"])} />
+          case "first_step":               return <FirstStepBlock key={block.id} {...(props as BlockProps["first_step"])} />
+          case "footer_continuity":        return <FooterContinuityBlock key={block.id} {...(props as BlockProps["footer_continuity"])} />
           default:
             // 未知の type は無視 (将来追加 block への前方互換性)
             console.warn(`[BlockRenderer] unknown block type: ${(block as Block).type}`)
