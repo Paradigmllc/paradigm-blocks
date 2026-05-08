@@ -5,20 +5,24 @@
 import type { RiskQuantificationProps, ScenarioOutcome } from "../types"
 import { NarrativeSection, NarrativeEyebrow, ConfidenceBadge, SourceBadge } from "./_narrative-shared"
 
-const SCENARIO_TONE = {
-  conservative: { label: "保守シナリオ", accent: "var(--paradigm-risk-conservative, #DC2626)", icon: "▼" },
-  neutral:      { label: "中立シナリオ", accent: "var(--paradigm-risk-neutral, #B45309)",      icon: "■" },
-  optimistic:   { label: "楽観シナリオ", accent: "var(--paradigm-risk-optimistic, #047857)",  icon: "▲" },
+const SCENARIO_ACCENT = {
+  conservative: { accent: "var(--paradigm-risk-conservative, #DC2626)", icon: "▼" },
+  neutral:      { accent: "var(--paradigm-risk-neutral, #B45309)",      icon: "■" },
+  optimistic:   { accent: "var(--paradigm-risk-optimistic, #047857)",  icon: "▲" },
 } as const
 
 function ScenarioCard({
   kind,
   outcome,
+  scenarioLabel,
+  preconditionPrefix,
 }: {
-  kind: keyof typeof SCENARIO_TONE
+  kind: keyof typeof SCENARIO_ACCENT
   outcome: ScenarioOutcome
+  scenarioLabel: string
+  preconditionPrefix: string
 }) {
-  const tone = SCENARIO_TONE[kind]
+  const tone = SCENARIO_ACCENT[kind]
   return (
     <div
       style={{
@@ -33,7 +37,7 @@ function ScenarioCard({
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
         <span style={{ color: tone.accent, fontSize: 14, fontWeight: 700 }}>{tone.icon}</span>
         <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--paradigm-ink-soft, #6B7280)" }}>
-          {tone.label}
+          {scenarioLabel}
         </div>
       </div>
 
@@ -49,7 +53,7 @@ function ScenarioCard({
 
       {outcome.precondition && (
         <div style={{ fontSize: 11, color: "var(--paradigm-ink-soft, #6B7280)", fontStyle: "italic" }}>
-          前提: {outcome.precondition}
+          {preconditionPrefix}{outcome.precondition}
         </div>
       )}
     </div>
@@ -61,10 +65,19 @@ export function RiskQuantificationBlock({
   horizon,
   scenarios,
   assumptions,
+  labels,
 }: RiskQuantificationProps) {
+  // composer が report_templates.block_labels から inject (Driver #1 #3 順守).
+  const eyebrowPrefix         = labels?.eyebrowPrefix         ?? "Risk Quantification — "
+  const scenarioConservative  = labels?.scenarioConservative  ?? "Conservative"
+  const scenarioNeutral       = labels?.scenarioNeutral       ?? "Neutral"
+  const scenarioOptimistic    = labels?.scenarioOptimistic    ?? "Optimistic"
+  const preconditionPrefix    = labels?.preconditionPrefix    ?? "Precondition: "
+  const assumptionsTitle      = labels?.assumptionsTitle      ?? "Assumptions"
+  const eyebrow = `${eyebrowPrefix}${horizon}`
   return (
-    <NarrativeSection variant="default" ariaLabel="リスク シナリオ評価">
-      <NarrativeEyebrow>Risk Quantification — {horizon}</NarrativeEyebrow>
+    <NarrativeSection variant="default" ariaLabel={eyebrow}>
+      <NarrativeEyebrow>{eyebrow}</NarrativeEyebrow>
 
       <h2
         style={{
@@ -75,13 +88,13 @@ export function RiskQuantificationBlock({
           margin: "0 0 20px 0",
         }}
       >
-        {heading ?? "3 シナリオ別の outcome range"}
+        {heading ?? eyebrow}
       </h2>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: assumptions && assumptions.length > 0 ? 24 : 0 }}>
-        <ScenarioCard kind="conservative" outcome={scenarios.conservative} />
-        <ScenarioCard kind="neutral"      outcome={scenarios.neutral} />
-        <ScenarioCard kind="optimistic"   outcome={scenarios.optimistic} />
+        <ScenarioCard kind="conservative" outcome={scenarios.conservative} scenarioLabel={scenarioConservative} preconditionPrefix={preconditionPrefix} />
+        <ScenarioCard kind="neutral"      outcome={scenarios.neutral}      scenarioLabel={scenarioNeutral}      preconditionPrefix={preconditionPrefix} />
+        <ScenarioCard kind="optimistic"   outcome={scenarios.optimistic}   scenarioLabel={scenarioOptimistic}   preconditionPrefix={preconditionPrefix} />
       </div>
 
       {assumptions && assumptions.length > 0 && (
@@ -96,7 +109,7 @@ export function RiskQuantificationBlock({
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 6, color: "var(--paradigm-ink-soft, #4B5563)" }}>
-            計算前提
+            {assumptionsTitle}
           </div>
           <ul style={{ margin: 0, paddingLeft: 18 }}>
             {assumptions.map((a, idx) => (

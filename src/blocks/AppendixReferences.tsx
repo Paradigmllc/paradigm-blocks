@@ -11,10 +11,17 @@ export function AppendixReferencesBlock({
   rawDataUrl,
   continuityBadge,
   legalNote,
+  labels,
 }: AppendixReferencesProps) {
+  // composer が report_templates.block_labels から inject (Driver #1 #3 順守).
+  const eyebrow              = labels?.eyebrow              ?? "Appendix & References"
+  const fetchedOnPrefix      = labels?.fetchedOnPrefix      ?? "Fetched: "
+  const rawDataLinkLabel     = labels?.rawDataLinkLabel     ?? "⤓ Download raw data (JSON)"
+  const continuityBadgeTitle = labels?.continuityBadgeTitle ?? "Continued Care"
+  const nextCheckMonthLabel  = labels?.nextCheckMonthLabel  ?? "Next Health Check: "
   return (
-    <NarrativeSection variant="quiet" ariaLabel="付録と参照">
-      <NarrativeEyebrow>Appendix &amp; References</NarrativeEyebrow>
+    <NarrativeSection variant="quiet" ariaLabel={eyebrow}>
+      <NarrativeEyebrow>{eyebrow}</NarrativeEyebrow>
 
       <h2
         style={{
@@ -25,7 +32,7 @@ export function AppendixReferencesBlock({
           margin: "0 0 16px 0",
         }}
       >
-        {heading ?? "参照ソース一覧"}
+        {heading ?? eyebrow}
       </h2>
 
       <ol
@@ -63,7 +70,7 @@ export function AppendixReferencesBlock({
               <span style={{ color: "var(--paradigm-ink, #111827)" }}>{r.sourceName}</span>
             )}
             <span style={{ marginLeft: 8, fontSize: 11, color: "var(--paradigm-ink-soft, #6B7280)", fontVariantNumeric: "tabular-nums" }}>
-              取得: {r.fetchedAt}
+              {fetchedOnPrefix}{r.fetchedAt}
             </span>
             {r.note && (
               <div style={{ marginTop: 4, fontSize: 11, color: "var(--paradigm-ink-soft, #6B7280)", paddingLeft: 24 }}>
@@ -93,7 +100,7 @@ export function AppendixReferencesBlock({
               textDecoration: "none",
             }}
           >
-            ⤓ 生データを取得 (JSON)
+            {rawDataLinkLabel}
           </a>
         </div>
       )}
@@ -117,10 +124,10 @@ export function AppendixReferencesBlock({
               marginBottom: 6,
             }}
           >
-            継続診断
+            {continuityBadgeTitle}
           </div>
           <NarrativeBody size="sm" style={{ color: "var(--paradigm-ink, #111827)" }}>
-            次回 月次健診: <strong style={{ fontVariantNumeric: "tabular-nums" }}>{continuityBadge.nextCheckMonth}</strong>
+            {nextCheckMonthLabel}<strong style={{ fontVariantNumeric: "tabular-nums" }}>{continuityBadge.nextCheckMonth}</strong>
             {continuityBadge.message && <span style={{ marginLeft: 8, color: "var(--paradigm-ink-soft, #4B5563)" }}>— {continuityBadge.message}</span>}
           </NarrativeBody>
         </div>

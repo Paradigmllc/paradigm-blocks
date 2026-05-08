@@ -606,6 +606,14 @@ export interface CoverSummaryProps {
   }>
   /** 主治医ポジション バッジ (継続診断の表現・任意) */
   continuityBadge?: string
+  /** 全 visible label を props 化 — composer が report_templates.block_labels から inject (Driver #1 #3 順守) */
+  labels?: {
+    eyebrow?: string         // 例: "Executive Summary"
+    titleSuffix?: string     // 例: "様 Web 健診レポート"
+    diagnosedOn?: string     // 例: "診断日"
+    leadBy?: string          // 例: "Lead"
+    intro?: string           // 例: "本レポートで特に重要な所見 3 件:"
+  }
 }
 
 /**
@@ -625,6 +633,15 @@ export interface MethodologyProps {
     method?: string
   }>
   limitations?: string[]
+  /** 全 visible label を props 化 (Driver #1 #3 順守) */
+  labels?: {
+    eyebrow?: string         // 例: "Methodology"
+    colSource?: string       // 例: "ソース"
+    colMeasured?: string     // 例: "測定対象"
+    colFetchedAt?: string    // 例: "取得日"
+    colConfidence?: string   // 例: "信頼度"
+    limitsTitle?: string     // 例: "限界・前提条件"
+  }
 }
 
 /**
@@ -643,6 +660,14 @@ export interface IndustryContextProps {
     industryMedian: SourcedFact<string | number>
     delta?: string
   }>
+  /** 全 visible label を props 化 (Driver #1 #3 順守) */
+  labels?: {
+    eyebrowPrefix?: string   // 例: "Industry Context — "
+    colMetric?: string       // 例: "指標"
+    colYourValue?: string    // 例: "御社"
+    colIndustryMedian?: string  // 例: "業界中央値"
+    colDelta?: string        // 例: "差分"
+  }
 }
 
 /**
@@ -661,6 +686,15 @@ export interface RiskQuantificationProps {
     optimistic: ScenarioOutcome
   }
   assumptions?: string[]
+  /** 全 visible label を props 化 (Driver #1 #3 順守) */
+  labels?: {
+    eyebrowPrefix?: string         // 例: "Risk Quantification — "
+    scenarioConservative?: string  // 例: "保守シナリオ"
+    scenarioNeutral?: string       // 例: "中立シナリオ"
+    scenarioOptimistic?: string    // 例: "楽観シナリオ"
+    preconditionPrefix?: string    // 例: "前提: "
+    assumptionsTitle?: string      // 例: "計算前提"
+  }
 }
 
 export interface ScenarioOutcome {
@@ -691,6 +725,14 @@ export interface AppendixReferencesProps {
     message?: string
   }
   legalNote?: string
+  /** 全 visible label を props 化 (Driver #1 #3 順守) */
+  labels?: {
+    eyebrow?: string                 // 例: "Appendix & References"
+    fetchedOnPrefix?: string         // 例: "取得: "
+    rawDataLinkLabel?: string        // 例: "⤓ 生データを取得 (JSON)"
+    continuityBadgeTitle?: string    // 例: "継続診断"
+    nextCheckMonthLabel?: string     // 例: "次回 月次健診: "
+  }
 }
 
 // ─── 統合 type — Block の discriminated union ──────────────────────

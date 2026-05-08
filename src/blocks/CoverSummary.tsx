@@ -11,10 +11,18 @@ export function CoverSummaryBlock({
   leadConsultant,
   topFindings,
   continuityBadge,
+  labels,
 }: CoverSummaryProps) {
+  // 全 label は composer が report_templates.block_labels から inject (Driver #1 #3).
+  // ここの default は silently-JA-leak 防止のため意図的に英語. composer 側で必須提供.
+  const eyebrow      = labels?.eyebrow      ?? "Executive Summary"
+  const titleSuffix  = labels?.titleSuffix  ?? " — Web Health Report"
+  const diagnosedOn  = labels?.diagnosedOn  ?? "Diagnosed on"
+  const leadBy       = labels?.leadBy       ?? "Lead"
+  const intro        = labels?.intro        ?? "Top 3 findings from this report:"
   return (
-    <NarrativeSection variant="default" ariaLabel="表紙とサマリ">
-      <NarrativeEyebrow>Executive Summary</NarrativeEyebrow>
+    <NarrativeSection variant="default" ariaLabel={eyebrow}>
+      <NarrativeEyebrow>{eyebrow}</NarrativeEyebrow>
 
       <h1
         style={{
@@ -26,7 +34,7 @@ export function CoverSummaryBlock({
           lineHeight: 1.3,
         }}
       >
-        {customerName} 様 Web 健診レポート
+        {customerName}{titleSuffix}
       </h1>
 
       <div
@@ -36,7 +44,7 @@ export function CoverSummaryBlock({
           marginBottom: 32,
         }}
       >
-        診断日: {reportDate} ／ Lead: {leadConsultant}
+        {diagnosedOn}: {reportDate} ／ {leadBy}: {leadConsultant}
         {continuityBadge && (
           <span style={{ marginLeft: 12, padding: "2px 8px", background: "var(--paradigm-accent-soft-bg, rgba(0,0,0,0.04))", borderRadius: 4 }}>
             {continuityBadge}
@@ -45,7 +53,7 @@ export function CoverSummaryBlock({
       </div>
 
       <NarrativeBody size="md" style={{ marginBottom: 16, color: "var(--paradigm-ink-soft, #4B5563)" }}>
-        本レポートで特に重要な所見 3 件:
+        {intro}
       </NarrativeBody>
 
       <ol style={{ listStyle: "none", padding: 0, margin: 0, counterReset: "finding" }}>

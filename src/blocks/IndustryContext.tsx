@@ -10,10 +10,18 @@ export function IndustryContextBlock({
   industryLabel,
   macroTrend,
   benchmarks,
+  labels,
 }: IndustryContextProps) {
+  // composer が report_templates.block_labels から inject (Driver #1 #3 順守).
+  const eyebrowPrefix     = labels?.eyebrowPrefix     ?? "Industry Context — "
+  const colMetric         = labels?.colMetric         ?? "Metric"
+  const colYourValue      = labels?.colYourValue      ?? "Your Value"
+  const colIndustryMedian = labels?.colIndustryMedian ?? "Industry Median"
+  const colDelta          = labels?.colDelta          ?? "Delta"
+  const eyebrow = `${eyebrowPrefix}${industryLabel}`
   return (
-    <NarrativeSection variant="default" ariaLabel="業界 context と benchmark">
-      <NarrativeEyebrow>Industry Context — {industryLabel}</NarrativeEyebrow>
+    <NarrativeSection variant="default" ariaLabel={eyebrow}>
+      <NarrativeEyebrow>{eyebrow}</NarrativeEyebrow>
 
       <h2
         style={{
@@ -24,7 +32,7 @@ export function IndustryContextBlock({
           margin: "0 0 16px 0",
         }}
       >
-        {heading ?? "業界の中での位置づけ"}
+        {heading ?? eyebrow}
       </h2>
 
       {macroTrend && (
@@ -47,10 +55,10 @@ export function IndustryContextBlock({
       >
         <thead>
           <tr style={{ borderBottom: "2px solid var(--paradigm-rule, rgba(0,0,0,0.12))" }}>
-            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>指標</th>
-            <th style={{ textAlign: "right", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>御社</th>
-            <th style={{ textAlign: "right", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>業界中央値</th>
-            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>差分</th>
+            <th style={{ textAlign: "left",  padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>{colMetric}</th>
+            <th style={{ textAlign: "right", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>{colYourValue}</th>
+            <th style={{ textAlign: "right", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>{colIndustryMedian}</th>
+            <th style={{ textAlign: "left",  padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>{colDelta}</th>
           </tr>
         </thead>
         <tbody>

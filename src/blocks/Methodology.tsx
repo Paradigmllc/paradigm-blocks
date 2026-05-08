@@ -10,10 +10,18 @@ export function MethodologyBlock({
   summary,
   dataSources,
   limitations,
+  labels,
 }: MethodologyProps) {
+  // composer が report_templates.block_labels から inject (Driver #1 #3 順守).
+  const eyebrow        = labels?.eyebrow        ?? "Methodology"
+  const colSource      = labels?.colSource      ?? "Source"
+  const colMeasured    = labels?.colMeasured    ?? "Measured"
+  const colFetchedAt   = labels?.colFetchedAt   ?? "Fetched"
+  const colConfidence  = labels?.colConfidence  ?? "Confidence"
+  const limitsTitle    = labels?.limitsTitle    ?? "Limitations & Assumptions"
   return (
-    <NarrativeSection variant="quiet" ariaLabel="調査方法とデータソース">
-      <NarrativeEyebrow>Methodology</NarrativeEyebrow>
+    <NarrativeSection variant="quiet" ariaLabel={eyebrow}>
+      <NarrativeEyebrow>{eyebrow}</NarrativeEyebrow>
 
       <h2
         style={{
@@ -24,7 +32,7 @@ export function MethodologyBlock({
           margin: "0 0 16px 0",
         }}
       >
-        {heading ?? "調査方法とデータソース"}
+        {heading ?? eyebrow}
       </h2>
 
       {summary && (
@@ -43,10 +51,10 @@ export function MethodologyBlock({
       >
         <thead>
           <tr style={{ borderBottom: "2px solid var(--paradigm-rule, rgba(0,0,0,0.12))" }}>
-            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>ソース</th>
-            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>測定対象</th>
-            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>取得日</th>
-            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>信頼度</th>
+            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>{colSource}</th>
+            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>{colMeasured}</th>
+            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>{colFetchedAt}</th>
+            <th style={{ textAlign: "left", padding: "10px 8px", fontWeight: 600, color: "var(--paradigm-ink-soft, #4B5563)" }}>{colConfidence}</th>
           </tr>
         </thead>
         <tbody>
@@ -89,7 +97,7 @@ export function MethodologyBlock({
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: 6, color: "var(--paradigm-ink-soft, #4B5563)" }}>
-            限界・前提条件
+            {limitsTitle}
           </div>
           <ul style={{ margin: 0, paddingLeft: 18 }}>
             {limitations.map((l, idx) => (
