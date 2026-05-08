@@ -77,6 +77,19 @@ export type {
   AppendixReferencesProps,
   ScenarioOutcome,
   Confidence,
+  // D-12 v1.0.0 (2026-05-08) Karte v1 — 主治医カルテ型 7 Block
+  KarteCoverProps,
+  KarteChiefComplaintProps,
+  KarteExaminationProps,
+  KarteDiagnosisProps,
+  KartePrescriptionProps,
+  KarteFollowUpProps,
+  KarteConsultationProps,
+  KartePainItem,
+  KarteExaminationRow,
+  KartePrescriptionItem,
+  KarteLabelMap,
+  KarteBrandVoice,
   // shared
   SourceCitation,
   SourcedFact,
@@ -132,3 +145,11 @@ export { MethodologyBlock } from "./blocks/Methodology"
 export { IndustryContextBlock } from "./blocks/IndustryContext"
 export { RiskQuantificationBlock } from "./blocks/RiskQuantification"
 export { AppendixReferencesBlock } from "./blocks/AppendixReferences"
+// D-12 v1.0.0 (2026-05-08) Karte v1 — 主治医カルテ型 7 Block
+export { KarteCoverBlock } from "./blocks/karte/KarteCover"
+export { KarteChiefComplaintBlock } from "./blocks/karte/KarteChiefComplaint"
+export { KarteExaminationBlock } from "./blocks/karte/KarteExamination"
+export { KarteDiagnosisBlock } from "./blocks/karte/KarteDiagnosis"
+export { KartePrescriptionBlock } from "./blocks/karte/KartePrescription"
+export { KarteFollowUpBlock } from "./blocks/karte/KarteFollowUp"
+export { KarteConsultationBlock } from "./blocks/karte/KarteConsultation"

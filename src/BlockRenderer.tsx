@@ -46,6 +46,14 @@ import { MethodologyBlock } from "./blocks/Methodology"
 import { IndustryContextBlock } from "./blocks/IndustryContext"
 import { RiskQuantificationBlock } from "./blocks/RiskQuantification"
 import { AppendixReferencesBlock } from "./blocks/AppendixReferences"
+// D-12 v1.0.0 (2026-05-08) — 主治医カルテ型 7 Block
+import { KarteCoverBlock } from "./blocks/karte/KarteCover"
+import { KarteChiefComplaintBlock } from "./blocks/karte/KarteChiefComplaint"
+import { KarteExaminationBlock } from "./blocks/karte/KarteExamination"
+import { KarteDiagnosisBlock } from "./blocks/karte/KarteDiagnosis"
+import { KartePrescriptionBlock } from "./blocks/karte/KartePrescription"
+import { KarteFollowUpBlock } from "./blocks/karte/KarteFollowUp"
+import { KarteConsultationBlock } from "./blocks/karte/KarteConsultation"
 
 interface BlockRendererProps {
   blocks: Block[]
@@ -131,6 +139,14 @@ export function BlockRenderer({ blocks, region }: BlockRendererProps) {
           case "industry_context":         return <IndustryContextBlock key={block.id} {...(props as BlockProps["industry_context"])} />
           case "risk_quantification":      return <RiskQuantificationBlock key={block.id} {...(props as BlockProps["risk_quantification"])} />
           case "appendix_references":      return <AppendixReferencesBlock key={block.id} {...(props as BlockProps["appendix_references"])} />
+          // D-12 v1.0.0 (2026-05-08) Karte v1 Blocks
+          case "karte_cover":              return <KarteCoverBlock key={block.id} {...(props as BlockProps["karte_cover"])} />
+          case "karte_chief_complaint":    return <KarteChiefComplaintBlock key={block.id} {...(props as BlockProps["karte_chief_complaint"])} />
+          case "karte_examination":        return <KarteExaminationBlock key={block.id} {...(props as BlockProps["karte_examination"])} />
+          case "karte_diagnosis":          return <KarteDiagnosisBlock key={block.id} {...(props as BlockProps["karte_diagnosis"])} />
+          case "karte_prescription":       return <KartePrescriptionBlock key={block.id} {...(props as BlockProps["karte_prescription"])} />
+          case "karte_follow_up":          return <KarteFollowUpBlock key={block.id} {...(props as BlockProps["karte_follow_up"])} />
+          case "karte_consultation":       return <KarteConsultationBlock key={block.id} {...(props as BlockProps["karte_consultation"])} />
           default:
             // 未知の type は無視 (将来追加 block への前方互換性)
             console.warn(`[BlockRenderer] unknown block type: ${(block as Block).type}`)

@@ -787,6 +787,16 @@ export type BlockType =
   | "industry_context"
   | "risk_quantification"
   | "appendix_references"
+  // ─── D-12 v1.0.0 (2026-05-08) — 主治医カルテ型 7 Block ───
+  // 旧 36 block を superset で置換する新世代. content は完全に DB-driven (A-CONTENT 鉄則).
+  // Block 内に文字列リテラル / 色 / 分岐 ZERO. ThemeProvider が CSS 変数として token を注入.
+  | "karte_cover"
+  | "karte_chief_complaint"
+  | "karte_examination"
+  | "karte_diagnosis"
+  | "karte_prescription"
+  | "karte_follow_up"
+  | "karte_consultation"
 
 export type BlockProps = {
   hero: HeroProps
@@ -828,6 +838,14 @@ export type BlockProps = {
   industry_context: IndustryContextProps
   risk_quantification: RiskQuantificationProps
   appendix_references: AppendixReferencesProps
+  // D-12 v1.0.0 (2026-05-08) Karte v1 Blocks
+  karte_cover: KarteCoverProps
+  karte_chief_complaint: KarteChiefComplaintProps
+  karte_examination: KarteExaminationProps
+  karte_diagnosis: KarteDiagnosisProps
+  karte_prescription: KartePrescriptionProps
+  karte_follow_up: KarteFollowUpProps
+  karte_consultation: KarteConsultationProps
 }
 
 export interface Block<T extends BlockType = BlockType> {
@@ -860,4 +878,162 @@ export interface ContentDoc {
   is_active: boolean
   created_at: string
   updated_at: string
+}
+
+// ─── D-12 v1.0.0 — 主治医カルテ型 7 Block 型定義 ─────────────────────
+//
+// 設計鉄則 (永久ルール):
+//   1. A-CONTENT: 全 visible 文字列は props 経由 (block 内文字列リテラル禁止)
+//   2. B28 #12: 数値は SourcedFact で出典必須
+//   3. 色 / font / radius は CSS 変数のみ (--paradigm-* / ThemeProvider が DB から注入)
+//   4. block 内に if/switch on theme 禁止 (CSS 変数で完結)
+//
+// labels prop = report_block_labels (ja/en) から fetch 済の UI 文字列マップ.
+// brandVoice prop = report_brand_voice から fetch 済 (clinic_name / doctor_signature 等).
+// ──────────────────────────────────────────────────────────────────
+
+/** 1 痛み (主訴) — pain_catalog row + 実測値 */
+export interface KartePainItem {
+  painId: string
+  category:
+    | "speed_loss"
+    | "search_lost"
+    | "security_hole"
+    | "tech_debt"
+    | "compliance"
+    | "reputation_gap"
+    | "app_vulnerability_grey_market"
+    | "competitor_reversal"
+  severity: "critical" | "high" | "medium" | "low" | "info"
+  /** 顧客可視タイトル (pain_catalog.title_translations から DB lookup 済) */
+  title: string
+  /** 顧客可視説明 (pain_catalog.description_translations から DB lookup 済) */
+  description: string
+  /** 実測値の文字列表現 (例 "1842 ms") + label */
+  evidence: string
+  /** 出典 (B28 #12 出典可視化) */
+  sourceLabel: string
+  /** 重症度 UI 用 ordinal (1-5) */
+  severityRank: 1 | 2 | 3 | 4 | 5
+}
+
+/** 1 検査項目 — 実測値 vs 業界中央値 */
+export interface KarteExaminationRow {
+  /** 計測項目名 ("TTFB" / "LCP" / "SSL Grade" 等) */
+  metric: string
+  /** 御社実測 + source */
+  yourValue: SourcedFact<string | number>
+  /** 業界中央値 + source */
+  industryMedian: SourcedFact<string | number>
+  /** 単位 ("ms" / "%" / "-" 等) */
+  unit: string
+  /** delta 表示 ("+42 ms (悪化)" 等) — composer が事前計算 */
+  delta?: string
+  /** 判定 ("good" | "warning" | "critical") — UI 色強調用 */
+  judgment: "good" | "warning" | "critical"
+}
+
+/** 1 処方箋アクション */
+export interface KartePrescriptionItem {
+  painId: string
+  /** 処方タイトル (prescription_catalog.title_translations) */
+  title: string
+  /** 具体アクション 3-5 件 (prescription_catalog.actions_translations) */
+  actions: string[]
+  /** 推奨工数 (日) */
+  effortDays: number
+  /** 期待改善率 (0.05 = +5%) */
+  expectedLiftRate: number
+  /** 優先度 (1 = 最優先) */
+  priority: number
+}
+
+/** 共通 labels prop (report_block_labels から fetch 済) */
+export interface KarteLabelMap {
+  [labelKey: string]: string
+}
+
+/** 共通 brand voice (report_brand_voice から fetch 済) */
+export interface KarteBrandVoice {
+  clinicName: string
+  doctorSignature: string
+  greeting: string
+  disclaimerPrivacy: string
+  disclaimerTokushoho?: string
+}
+
+// ─── 1. KarteCover — 表紙 ────────────────────────────────────────
+export interface KarteCoverProps {
+  chartNo: string                    // カルテ番号 (lead.id 短縮)
+  customerName: string               // 御社名
+  examinationDate: string            // 診察日 ISO
+  brandVoice: KarteBrandVoice
+  labels: KarteLabelMap              // section.cover / label.chart_no / label.examination_date / label.attending_doctor
+}
+
+// ─── 2. KarteChiefComplaint — 主訴 (痛み 3 件 + Dify intro) ─────
+export interface KarteChiefComplaintProps {
+  heading: string                    // section.chief_complaint
+  subheading?: string
+  /** Dify narrative (chief_complaint_intro slot・80-150 chars) */
+  narrativeIntro?: string
+  pains: KartePainItem[]             // 上位 3 件
+  labels: KarteLabelMap              // label.severity / label.evidence
+}
+
+// ─── 3. KarteExamination — 検査結果 (data_table 形式) ──────────
+export interface KarteExaminationProps {
+  heading: string                    // section.examination
+  subheading?: string
+  rows: KarteExaminationRow[]        // 全実測値
+  labels: KarteLabelMap              // label.your_value / label.industry_median / label.delta
+}
+
+// ─── 4. KarteDiagnosis — 診断 (Dify narrative メイン) ──────────
+export interface KarteDiagnosisProps {
+  heading: string                    // section.diagnosis
+  subheading?: string
+  /** Dify narrative (diagnosis slot・200-400 chars) */
+  narrativeProse: string
+  /** 診断の結論 1 文 (composer が narrative の冒頭から抽出 or DB) */
+  primaryFinding?: string
+  labels: KarteLabelMap
+}
+
+// ─── 5. KartePrescription — 処方箋 (timeline 形式) ──────────────
+export interface KartePrescriptionProps {
+  heading: string                    // section.prescription
+  subheading?: string
+  /** Dify narrative (prescription_rationale slot・150-300 chars) */
+  narrativeRationale?: string
+  items: KartePrescriptionItem[]     // 処方アクション一覧 (priority 順)
+  labels: KarteLabelMap              // label.effort_days / label.expected_lift
+}
+
+// ─── 6. KarteFollowUp — 経過観察 (月次健診案内) ─────────────────
+export interface KarteFollowUpProps {
+  heading: string                    // section.follow_up
+  subheading?: string
+  /** Dify narrative (follow_up_strategy slot・100-200 chars) */
+  narrativeStrategy?: string
+  /** 次回検診月 (YYYY-MM) */
+  nextCheckMonth?: string
+  /** 再測定 KPI 3 件 (composer が pain から抽出) */
+  rePmeasureKpis?: string[]
+  labels: KarteLabelMap              // label.next_check
+}
+
+// ─── 7. KarteConsultation — ご相談 (Cal.com 1 ボタン) ──────────
+export interface KarteConsultationProps {
+  heading: string                    // section.consultation
+  subheading?: string
+  /** Cal.com booking URL */
+  bookingUrl: string
+  /** CTA 文言 (cta.book_consultation) */
+  ctaLabel: string
+  /** 相談時間 (分) */
+  durationMinutes: number
+  /** 担当医署名 + clinic 名 (footer 一体化) */
+  brandVoice: KarteBrandVoice
+  labels: KarteLabelMap
 }

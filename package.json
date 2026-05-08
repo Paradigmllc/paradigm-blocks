@@ -1,7 +1,7 @@
 {
   "name": "@paradigmllc/blocks",
-  "version": "0.6.0",
-  "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用) shared between Appexxme + paradigmjpcom. v0.6.0 (D-11 R7 Phase 2C) deprecates UrgencyLabel type and makes HeroWithUrgencyProps.urgencyLabel optional — composer v2 (research-grade 12 block) migration prep. v0.7.0 will physically remove the type.",
+  "version": "1.0.0",
+  "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用). v1.0.0 (D-12 / 2026-05-08) introduces 主治医カルテ型 7 Karte Blocks (KarteCover/ChiefComplaint/Examination/Diagnosis/Prescription/FollowUp/Consultation) with strict A-CONTENT compliance — all visible content via props, all colors/fonts via CSS variables only. ThemeProvider gains DB-injected `tokens` prop for CMS-editable design tokens. Legacy 36 blocks retained for backward-compat.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",

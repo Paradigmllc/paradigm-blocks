@@ -15,6 +15,7 @@
 import type { ReactNode } from "react"
 import {
   type DesignTheme,
+  type DesignThemeTokens,
   getThemeTokens,
   themeToCssVars,
   resolveDesignTheme,
@@ -23,9 +24,17 @@ import {
 import { ThemeContextProvider } from "./ThemeContext"
 
 interface ThemeProviderProps {
-  /** 明示指定 (DB の meta.design_theme) */
+  /** 明示指定 (DB の meta.design_theme) — legacy fallback path */
   theme?: DesignTheme | null | undefined
-  /** 自動 resolve 用 hint (theme 未指定時のみ使用) */
+  /**
+   * D-12 v1.0.0 (2026-05-08): DB design_themes table から fetch 済 token map.
+   * tokens が指定されていれば theme は無視して直接 CSS 変数として inject.
+   * これにより A-CONTENT 鉄則準拠 (CMS から色を編集可能).
+   */
+  tokens?: DesignThemeTokens | null
+  /** D-12: tokens を引いた origin theme_slug (data-attribute 用・任意) */
+  themeSlug?: string | null
+  /** 自動 resolve 用 hint (theme/tokens 未指定時のみ使用) */
   industry?: string | null
   pitchAngle?: string | null
   /** RTL/LTR auto-direction (region === "ar" で rtl) */
@@ -40,6 +49,8 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   theme,
+  tokens: tokensProp,
+  themeSlug,
   industry,
   pitchAngle,
   dir = "ltr",
@@ -47,17 +58,22 @@ export function ThemeProvider({
   as: Tag = "div",
   className,
 }: ThemeProviderProps) {
-  const resolved = resolveDesignTheme({
-    explicit: theme,
-    industry,
-    pitchAngle,
-  })
-  const tokens = getThemeTokens(resolved)
+  // D-12 v1.0.0: DB-injected tokens を最優先 (A-CONTENT 鉄則).
+  // tokens 指定なし時のみ legacy hardcoded themes.ts に fallback.
+  const resolved: DesignTheme = tokensProp
+    ? "stripe"  // sentinel — context にだけ使う. tokens が真の source-of-truth.
+    : resolveDesignTheme({
+        explicit: theme,
+        industry,
+        pitchAngle,
+      })
+  const tokens = tokensProp ?? getThemeTokens(resolved)
   const style = themeToCssVars(tokens)
+  const dataThemeAttr = themeSlug ?? resolved
 
   return (
     <Tag
-      data-design-theme={resolved}
+      data-design-theme={dataThemeAttr}
       data-color-scheme={tokens.colorScheme}
       dir={dir}
       style={style}
