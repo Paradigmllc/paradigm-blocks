@@ -127,3 +127,36 @@ export function SourceBadge({
     inner
   )
 }
+
+/**
+ * ConfidenceBadge (R2 v0.5.0) — research grade の confidence ★ 三段階表示.
+ * AI 生成断言を排除する型レベル制約 (Confidence union) の UI 表現.
+ */
+export function ConfidenceBadge({ level }: { level: "high" | "medium" | "low" }) {
+  const stars = { high: "★★★", medium: "★★☆", low: "★☆☆" }[level]
+  const tone = {
+    high:   "var(--paradigm-confidence-high, #047857)",
+    medium: "var(--paradigm-confidence-medium, #B45309)",
+    low:    "var(--paradigm-confidence-low, #6B7280)",
+  }[level]
+  return (
+    <span
+      title={`Confidence: ${level}`}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        marginLeft: 8,
+        padding: "2px 8px",
+        background: "var(--paradigm-source-badge-bg, rgba(0,0,0,0.05))",
+        color: tone,
+        fontSize: 10,
+        fontWeight: 600,
+        letterSpacing: "0.04em",
+        borderRadius: 4,
+        verticalAlign: "middle",
+      }}
+    >
+      {stars}
+    </span>
+  )
+}

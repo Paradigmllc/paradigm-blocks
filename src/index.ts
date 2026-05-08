@@ -69,6 +69,14 @@ export type {
   ProofWithCredentialsProps,
   FirstStepProps,
   FooterContinuityProps,
+  // R2 / v0.5.0 (2026-05-08) Research Grade Block 5 種
+  CoverSummaryProps,
+  MethodologyProps,
+  IndustryContextProps,
+  RiskQuantificationProps,
+  AppendixReferencesProps,
+  ScenarioOutcome,
+  Confidence,
   // shared
   SourceCitation,
   SourcedFact,
@@ -118,3 +126,9 @@ export { OurAnswerBlock } from "./blocks/OurAnswer"
 export { ProofWithCredentialsBlock } from "./blocks/ProofWithCredentials"
 export { FirstStepBlock } from "./blocks/FirstStep"
 export { FooterContinuityBlock } from "./blocks/FooterContinuity"
+// R2 / v0.5.0 (2026-05-08) Research Grade Blocks
+export { CoverSummaryBlock } from "./blocks/CoverSummary"
+export { MethodologyBlock } from "./blocks/Methodology"
+export { IndustryContextBlock } from "./blocks/IndustryContext"
+export { RiskQuantificationBlock } from "./blocks/RiskQuantification"
+export { AppendixReferencesBlock } from "./blocks/AppendixReferences"

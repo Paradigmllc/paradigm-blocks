@@ -40,6 +40,12 @@ import { OurAnswerBlock } from "./blocks/OurAnswer"
 import { ProofWithCredentialsBlock } from "./blocks/ProofWithCredentials"
 import { FirstStepBlock } from "./blocks/FirstStep"
 import { FooterContinuityBlock } from "./blocks/FooterContinuity"
+// R2 / v0.5.0 (2026-05-08) — Research Grade Block 5 種
+import { CoverSummaryBlock } from "./blocks/CoverSummary"
+import { MethodologyBlock } from "./blocks/Methodology"
+import { IndustryContextBlock } from "./blocks/IndustryContext"
+import { RiskQuantificationBlock } from "./blocks/RiskQuantification"
+import { AppendixReferencesBlock } from "./blocks/AppendixReferences"
 
 interface BlockRendererProps {
   blocks: Block[]
@@ -119,6 +125,12 @@ export function BlockRenderer({ blocks, region }: BlockRendererProps) {
           case "proof_with_credentials":   return <ProofWithCredentialsBlock key={block.id} {...(props as BlockProps["proof_with_credentials"])} />
           case "first_step":               return <FirstStepBlock key={block.id} {...(props as BlockProps["first_step"])} />
           case "footer_continuity":        return <FooterContinuityBlock key={block.id} {...(props as BlockProps["footer_continuity"])} />
+          // R2 / v0.5.0 (2026-05-08) Research Grade Blocks
+          case "cover_summary":            return <CoverSummaryBlock key={block.id} {...(props as BlockProps["cover_summary"])} />
+          case "methodology":              return <MethodologyBlock key={block.id} {...(props as BlockProps["methodology"])} />
+          case "industry_context":         return <IndustryContextBlock key={block.id} {...(props as BlockProps["industry_context"])} />
+          case "risk_quantification":      return <RiskQuantificationBlock key={block.id} {...(props as BlockProps["risk_quantification"])} />
+          case "appendix_references":      return <AppendixReferencesBlock key={block.id} {...(props as BlockProps["appendix_references"])} />
           default:
             // 未知の type は無視 (将来追加 block への前方互換性)
             console.warn(`[BlockRenderer] unknown block type: ${(block as Block).type}`)

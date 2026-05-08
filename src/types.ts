@@ -565,6 +565,134 @@ export interface FooterContinuityProps {
   legalNote: string
 }
 
+// ─── R2 / v0.5.0 (2026-05-08) — Research Grade Block 5 種 ──────────
+//
+// 背景: ユーザー指示「リサーチレポート級に仕上げる・各テンプレもデザインだけでなく
+// 構成設計から見直し」+ Gartner / Forrester / McKinsey IR レポート構造の融合.
+//
+// 既存 narrative 8 block (D-10) を「営業 narrative」として保持しつつ、
+// research grade を実現する 5 block (cover_summary / methodology / industry_context /
+// risk_quantification / appendix_references) を追加して 12 block 完全構造を作る.
+//
+// 設計原則 (Research Grade 5 鉄則):
+//   1. Methodology First — 何をどう測ったか開示
+//   2. Citation Mandatory — 全数値に source 番号
+//   3. Confidence Triage — high/medium/low 三段階
+//   4. Scenario Quantification — 保守 / 中立 / 楽観 3 シナリオ range
+//   5. Reproducibility — Appendix raw data link
+//
+// 詳細 spec → docs/knowledge/diagnostic-report-research-grade-spec.md (appexxme worktree)
+
+/** Confidence 三段階 — 全 metric に必須付与. AI 生成断言を排除する型レベル制約. */
+export type Confidence = "high" | "medium" | "low"
+
+/**
+ * 1. CoverSummary — 表紙 + TL;DR 3 finding
+ *
+ * 旧 hero KPI ("推定年間損失 ¥XX") を廃止し、実測ベース 3 finding を TL;DR で提示.
+ * 顧客が 30 秒で「何が分かったか」を把握できる Executive Summary 型.
+ */
+export interface CoverSummaryProps {
+  customerName: string
+  /** 診断日 (YYYY-MM-DD) */
+  reportDate: string
+  /** Lead consultant 署名 (例: "Paradigm 合同会社 Web 健診事業部") */
+  leadConsultant: string
+  /** TL;DR 3 finding (各 1 sentence + confidence + source) */
+  topFindings: Array<{
+    headline: string
+    confidence: Confidence
+    primarySource?: string
+  }>
+  /** 主治医ポジション バッジ (継続診断の表現・任意) */
+  continuityBadge?: string
+}
+
+/**
+ * 2. Methodology — データソース一覧 + 測定日 + confidence per metric + limitations
+ *
+ * Research grade の命. 「何をどう測ったか」を完全開示し、
+ * 数値の根拠と限界を顧客が再検証できる状態にする.
+ */
+export interface MethodologyProps {
+  heading?: string
+  summary?: string
+  dataSources: Array<{
+    name: string
+    measured: string
+    fetchedAt: string
+    confidence: Confidence
+    method?: string
+  }>
+  limitations?: string[]
+}
+
+/**
+ * 3. IndustryContext — 業界 macro trend + benchmark (公開データ ベース)
+ *
+ * 御社の数値を「孤立した数字」ではなく業界 context の中で位置づける.
+ * e-Stat / BLS / OECD / Similarweb 等の公開 source を引用.
+ */
+export interface IndustryContextProps {
+  heading?: string
+  industryLabel: string
+  macroTrend?: SourcedFact<string>
+  benchmarks: Array<{
+    metricLabel: string
+    yourValue: SourcedFact<string | number>
+    industryMedian: SourcedFact<string | number>
+    delta?: string
+  }>
+}
+
+/**
+ * 4. RiskQuantification — 3 シナリオ (保守 / 中立 / 楽観) range
+ *
+ * 旧 "推定年間機会損失 ¥XX" の単一数値を廃止し、シナリオ別 range で確率分布提示.
+ * 断言を回避し信頼を獲得する research grade の心臓部.
+ */
+export interface RiskQuantificationProps {
+  heading?: string
+  /** 評価期間 (例: "6 ヶ月後") */
+  horizon: string
+  scenarios: {
+    conservative: ScenarioOutcome
+    neutral: ScenarioOutcome
+    optimistic: ScenarioOutcome
+  }
+  assumptions?: string[]
+}
+
+export interface ScenarioOutcome {
+  label: string
+  expected: SourcedFact<string>
+  confidence: Confidence
+  precondition?: string
+}
+
+/**
+ * 5. AppendixReferences — 全 citation + raw data + 月次健診継続バッジ
+ *
+ * Research grade の reproducibility. 顧客が我々の主張を再検証できる状態.
+ * 全 citation を [N] 順に列挙し、raw data link を提供.
+ */
+export interface AppendixReferencesProps {
+  heading?: string
+  references: Array<{
+    index: number
+    sourceName: string
+    url?: string
+    fetchedAt: string
+    note?: string
+  }>
+  rawDataUrl?: string
+  continuityBadge?: {
+    nextCheckMonth: string
+    message?: string
+  }
+  legalNote?: string
+}
+
 // ─── 統合 type — Block の discriminated union ──────────────────────
 
 export type BlockType =
@@ -601,6 +729,12 @@ export type BlockType =
   | "proof_with_credentials"
   | "first_step"
   | "footer_continuity"
+  // R2 / v0.5.0 (2026-05-08) — Research Grade Block 5 種
+  | "cover_summary"
+  | "methodology"
+  | "industry_context"
+  | "risk_quantification"
+  | "appendix_references"
 
 export type BlockProps = {
   hero: HeroProps
@@ -636,6 +770,12 @@ export type BlockProps = {
   proof_with_credentials: ProofWithCredentialsProps
   first_step: FirstStepProps
   footer_continuity: FooterContinuityProps
+  // R2 / v0.5.0 (2026-05-08) Research Grade Blocks
+  cover_summary: CoverSummaryProps
+  methodology: MethodologyProps
+  industry_context: IndustryContextProps
+  risk_quantification: RiskQuantificationProps
+  appendix_references: AppendixReferencesProps
 }
 
 export interface Block<T extends BlockType = BlockType> {
