@@ -1,6 +1,6 @@
 {
   "name": "@paradigmllc/blocks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Paradigm Sales OS v2 — Block discriminated union renderer (cms_content_blocks 用). v1.0.0 (D-12 / 2026-05-08) introduces 主治医カルテ型 7 Karte Blocks (KarteCover/ChiefComplaint/Examination/Diagnosis/Prescription/FollowUp/Consultation) with strict A-CONTENT compliance — all visible content via props, all colors/fonts via CSS variables only. ThemeProvider gains DB-injected `tokens` prop for CMS-editable design tokens. Legacy 36 blocks retained for backward-compat.",
   "license": "UNLICENSED",
   "private": false,

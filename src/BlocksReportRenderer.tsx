@@ -24,7 +24,7 @@ import { isValidRegion } from "./_types/region"
 import { Confetti } from "./_magicui/confetti"
 // B33 (2026-05-07): 6-design theme injection
 import { ThemeProvider } from "./ThemeProvider"
-import { isValidDesignTheme, type DesignTheme } from "./themes"
+import { isValidDesignTheme, type DesignTheme, type DesignThemeTokens } from "./themes"
 
 interface Props {
   doc: ContentDoc
@@ -45,6 +45,12 @@ export default function BlocksReportRenderer({ doc, slugOrToken }: Props) {
     : undefined
   const themeIndustry = (doc.meta?.industry as string | undefined) ?? null
   const themePitchAngle = (doc.meta?.pitch_angle as string | undefined) ?? null
+  // D-12 v1.0.0 (2026-05-08): DB design_themes table から fetch 済 token を embed (composer 経路).
+  // meta.design_tokens があれば ThemeProvider に直接 inject (CMS 編集対応・A-CONTENT 鉄則).
+  const designTokens = (doc.meta?.design_tokens as DesignThemeTokens | undefined) ?? null
+  // theme_slug: D-12 では "karte_clinic" 等 hardcoded themes.ts に無い slug が来うるので
+  //   ThemeProvider に themeSlug prop で data-design-theme attribute を上書き.
+  const themeSlug = typeof doc.meta?.design_theme === "string" ? (doc.meta.design_theme as string) : null
   useEffect(() => {
     if (urgencyLabel === "hopeful") {
       const t = setTimeout(() => setShowConfetti(true), 800)
@@ -97,6 +103,8 @@ export default function BlocksReportRenderer({ doc, slugOrToken }: Props) {
   return (
     <ThemeProvider
       theme={explicitTheme}
+      tokens={designTokens}
+      themeSlug={themeSlug}
       industry={themeIndustry}
       pitchAngle={themePitchAngle}
       dir={region === "ar" ? "rtl" : "ltr"}
