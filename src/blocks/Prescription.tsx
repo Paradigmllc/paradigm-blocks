@@ -1,5 +1,8 @@
 // ─── Prescription Block (P39) ──────────────────────────────────────
-// 処方箋 BentoGrid 3 カラム。痛み → 解決策 → 想定回復額 のマッピング。
+// 推奨対応 BentoGrid 3 カラム。観察項目 → 改善施策 → 想定効果 のマッピング。
+// 名称 "Prescription" は API 識別子として保持 (consumer 互換). 顧客可視
+// default heading は B36-P7A (2026-05-10) で「処方箋」→「推奨対応」へ
+// migrate (B2B 大人語彙ガイドライン準拠・childish vocab 撤廃).
 
 "use client"
 
@@ -20,7 +23,7 @@ function fmtJpy(n: number): string {
 }
 
 export function PrescriptionBlock({
-  heading = "処方箋",
+  heading = "推奨対応",
   prescriptions,
 }: PrescriptionProps) {
   return (
@@ -28,7 +31,7 @@ export function PrescriptionBlock({
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-slate-900 mb-2">{heading}</h2>
         <p className="text-sm text-slate-500 mb-6">
-          各痛みポイントに対する具体的な解決策と想定回復額
+          各観察項目に対する具体的な改善施策と想定効果
         </p>
         <BentoGrid className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {prescriptions.map((p, i) => {
